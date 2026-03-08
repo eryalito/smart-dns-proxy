@@ -9,9 +9,10 @@ import (
 )
 
 type Server struct {
-	Addr    string
-	Net     string
-	Querier *data.Querier
+	Addr     string
+	Net      string
+	Querier  *data.Querier
+	Resolver string
 }
 
 func (s *Server) Start() error {
@@ -21,9 +22,9 @@ func (s *Server) Start() error {
 }
 
 func (s *Server) dnsHandler(w dns.ResponseWriter, r *dns.Msg) {
-	// Forward query to 8.8.8.8
+	// Forward query to resolver
 	c := new(dns.Client)
-	resp, _, err := c.Exchange(r, "8.8.8.8:53")
+	resp, _, err := c.Exchange(r, s.Resolver)
 	if err != nil {
 		log.Printf("DNS forward error: %v", err)
 		dns.HandleFailed(w, r)
