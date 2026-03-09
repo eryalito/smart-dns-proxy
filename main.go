@@ -4,13 +4,21 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"os"
 	"time"
 
 	"github.com/eryalito/smart-dns-proxy/internal/data"
 	"github.com/eryalito/smart-dns-proxy/internal/dns"
 )
 
+var version = "dev"
+
 func main() {
+	if len(os.Args) > 1 && os.Args[1] == "version" {
+		fmt.Println(version)
+		return
+	}
+
 	host := flag.String("host", "127.0.0.1", "The host to listen on")
 	port := flag.String("port", "53", "The port to listen on")
 	resolver := flag.String("resolver", "8.8.8.8:53", "The upstream DNS resolver to use")

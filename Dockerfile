@@ -1,6 +1,8 @@
 # Build stage
 FROM golang:1.25-alpine AS builder
 
+ARG VERSION=dev
+
 WORKDIR /build
 
 # Copy go mod and sum files
@@ -13,7 +15,7 @@ RUN go mod download
 COPY . .
 
 # Build the application
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -o smart-dns-proxy .
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-X main.version=${VERSION}" -a -installsuffix cgo -o smart-dns-proxy .
 
 # Runtime stage
 FROM alpine:latest
